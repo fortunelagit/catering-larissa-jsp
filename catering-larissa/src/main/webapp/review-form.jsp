@@ -29,46 +29,40 @@ crossorigin="anonymous">
 	<div class="container col-md-5">
 		<div class="card">
 			<div class="card-body">
-				<c:if test="${menu != null}">
+				<c:if test="${review != null}">
 					<form action="update" method="post">
 				</c:if>
-				<c:if test="${menu == null}">
+				<c:if test="${review == null}">
 					<form action="insert" method="post">
 				</c:if>
 
 				<caption>
 					<h2>
-						<c:if test="${menu != null}">
-            				Edit Menu
+						<c:if test="${review != null}">
+            				Edit Review
             			</c:if>
 					</h2>
 				</caption>
 
-				<c:if test="${menu != null}">
-					<input type="hidden" name="id" value="<c:out value='${menu.id}' />" />
+				<c:if test="${review != null}">
+					<input type="hidden" name="id" value="<c:out value='${review.id}' />" />
 				</c:if>
 
 				<fieldset class="form-group">
 					<label>Name</label> <input type="text"
-						value="<c:out value='${menu.name}' />" class="form-control"
+						value="<c:out value='${review.name}' />" class="form-control"
 						name="name" required="required">
 				</fieldset>
 
 				<fieldset class="form-group">
-					<label>Type</label> <input type="text"
-						value="<c:out value='${menu.type}' />" class="form-control"
-						name="type">
-				</fieldset>
-
-				<fieldset class="form-group">
-					<label>Price</label> <input type="number"
-						value="<c:out value='${menu.price}' />" class="form-control"
-						name="price">
+					<label>Rating</label> <input type="number"
+						value="<c:out value='${review.rating}' />" class="form-control"
+						name="rating">
 				</fieldset>
 	
 				<fieldset class="form-group">
 					<label>Description</label> <input type="text"
-						value="<c:out value='${menu.description}' />" class="form-control"
+						value="<c:out value='${review.description}' />" class="form-control"
 						name="description">
 				</fieldset>
 

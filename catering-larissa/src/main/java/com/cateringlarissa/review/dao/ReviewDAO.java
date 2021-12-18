@@ -1,4 +1,4 @@
-package com.cateringlarissa.menu.dao;
+package com.cateringlarissa.review.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,30 +8,29 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.cateringlarissa.menu.model.Menu;
+import com.cateringlarissa.review.model.Review;
 
-public class MenuDAO {
-
+public class ReviewDAO {
 	private String jdbcURL = "jdbc:mysql://localhost:3306/demo?useSSL=false";
-	private String jdbcMenuname = "root";
+	private String jdbcReviewname = "root";
 	private String jdbcPassword = "root";
 
-	private static final String INSERT_MENUS_SQL = "INSERT INTO menus" + "  (name, type, description) VALUES "
+	private static final String INSERT_REVIEWS_SQL = "INSERT INTO reviews" + "  (name, rating, description) VALUES "
 			+ " (?, ?, ?);";
 
-	private static final String SELECT_MENU_BY_ID = "select id,name,type,description from menus where id =?";
-	private static final String SELECT_ALL_MENUS = "select * from menus";
-	private static final String DELETE_MENUS_SQL = "delete from menus where id = ?;";
-	private static final String UPDATE_MENUS_SQL = "update menus set name = ?,type= ?, description =? where id = ?;";
+	private static final String SELECT_REVIEW_BY_ID = "select id,name,rating,description from reviews where id =?";
+	private static final String SELECT_ALL_REVIEWS = "select * from reviews";
+	private static final String DELETE_REVIEWS_SQL = "delete from reviews where id = ?;";
+	private static final String UPDATE_REVIEWS_SQL = "update reviews set name = ?,rating= ?, description =? where id = ?;";
 
-	public MenuDAO() {
+	public ReviewDAO() {
 	}
 
 	protected Connection getConnection() {
 		Connection connection = null;
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			connection = DriverManager.getConnection(jdbcURL, jdbcMenuname, jdbcPassword);
+			connection = DriverManager.getConnection(jdbcURL, jdbcReviewname, jdbcPassword);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -42,16 +41,15 @@ public class MenuDAO {
 		return connection;
 	}
 
-	public void insertMenu(Menu menu) throws SQLException {
-		System.out.println(INSERT_MENUS_SQL);
+	public void insertReview(Review review) throws SQLException {
+		System.out.println(INSERT_REVIEWS_SQL);
 		
 
 		try (Connection connection = getConnection();
-				PreparedStatement preparedStatement = connection.prepareStatement(INSERT_MENUS_SQL)) {
-			preparedStatement.setString(1, menu.getName());
-			preparedStatement.setString(2, menu.getType());
-			preparedStatement.setLong(3, menu.getPrice());
-			preparedStatement.setString(4, menu.getDescription());
+				PreparedStatement preparedStatement = connection.prepareStatement(INSERT_REVIEWS_SQL)) {
+			preparedStatement.setString(1, review.getName());
+			preparedStatement.setLong(2, review.getRating());
+			preparedStatement.setString(3, review.getDescription());
 			System.out.println(preparedStatement);
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
@@ -59,12 +57,12 @@ public class MenuDAO {
 		}
 	}
 
-	public Menu selectMenu(int id) {
-		Menu menu = null;
+	public Review selectReview(int id) {
+		Review review = null;
 		
 		try (Connection connection = getConnection();
 				
-			PreparedStatement preparedStatement = connection.prepareStatement(SELECT_MENU_BY_ID);) {
+			PreparedStatement preparedStatement = connection.prepareStatement(SELECT_REVIEW_BY_ID);) {
 			preparedStatement.setInt(1, id);
 			System.out.println(preparedStatement);
 			
@@ -73,27 +71,26 @@ public class MenuDAO {
 			
 			while (rs.next()) {
 				String name = rs.getString("name");
-				String type = rs.getString("type");
-				int price = rs.getInt("price");
+				int rating = rs.getInt("rating");
 				String description = rs.getString("description");
-				menu = new Menu(id, name, type, price, description);
+				review = new Review(id, name, rating, description);
 				
 			}
 		} catch (SQLException e) {
 			printSQLException(e);
 		}
-		return menu;
+		return review;
 	}
 
-	public List<Menu> selectAllMenus() {
+	public List<Review> selectAllReviews() {
 
 
-		List<Menu> menus = new ArrayList<>();
+		List<Review> reviews = new ArrayList<>();
 
 		try (Connection connection = getConnection();
 
 				
-			PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_MENUS);) {
+			PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_REVIEWS);) {
 			
 			System.out.println(preparedStatement);
 			ResultSet rs = preparedStatement.executeQuery();
@@ -102,35 +99,34 @@ public class MenuDAO {
 			while (rs.next()) {
 				int id = rs.getInt("id");
 				String name = rs.getString("name");
-				String type = rs.getString("type");
-				int price = rs.getInt("price");
+				int rating = rs.getInt("rating");
 				String description = rs.getString("description");
-				menus.add(new Menu(id, name, type, price, description));
+				reviews.add(new Review(id, name, rating, description));
 			}
 		} catch (SQLException e) {
 			printSQLException(e);
 		}
-		return menus;
+		return reviews;
 	}
 
-	public boolean deleteMenu(int id) throws SQLException {
+	public boolean deleteReview(int id) throws SQLException {
 		boolean rowDeleted;
 		try (Connection connection = getConnection();
-				PreparedStatement statement = connection.prepareStatement(DELETE_MENUS_SQL);) {
+				PreparedStatement statement = connection.prepareStatement(DELETE_REVIEWS_SQL);) {
 			statement.setInt(1, id);
 			rowDeleted = statement.executeUpdate() > 0;
 		}
 		return rowDeleted;
 	}
 
-	public boolean updateMenu(Menu menu) throws SQLException {
+	public boolean updateReview(Review review) throws SQLException {
 		boolean rowUpdated;
 		try (Connection connection = getConnection();
-				PreparedStatement statement = connection.prepareStatement(UPDATE_MENUS_SQL);) {
-			statement.setString(1, menu.getName());
-			statement.setString(2, menu.getType());
-			statement.setString(3, menu.getDescription());
-			statement.setInt(4, menu.getId());
+				PreparedStatement statement = connection.prepareStatement(UPDATE_REVIEWS_SQL);) {
+			statement.setString(1, review.getName());
+			statement.setLong(2, review.getRating());
+			statement.setString(3, review.getDescription());
+			statement.setInt(4, review.getId());
 
 			rowUpdated = statement.executeUpdate() > 0;
 		}

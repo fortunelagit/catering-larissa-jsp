@@ -31,12 +31,12 @@
 			<!-- <div class="alert alert-success" *ngIf='message'>{{message}}</div> -->
 	
 			<div class="container">
-				<h3 class="text-center">List of Menus</h3>
+				<h3 class="text-center">List of Reviews</h3>
 				<hr>
 				<div class="container text-left">
 	
-					<a href="<%=request.getContextPath()%>/newmenu" class="btn btn-success">Add
-						New Menu</a>
+					<a href="<%=request.getContextPath()%>/newreview" class="btn btn-success">Add
+						New Review</a>
 				</div>
 				<br>
 				<table class="table table-bordered">
@@ -44,25 +44,23 @@
 						<tr>
 							<th>ID</th>
 							<th>Name</th>
-							<th>Type</th>
-							<th>Price</th>
+							<th>Rating</th>
 							<th>Description</th>
 							<th>Actions</th>
 						</tr>
 					</thead>
 					<tbody>
 						<!--   for (Todo todo: todos) {  -->
-						<c:forEach var="menu" items="${listMenu}">
+						<c:forEach var="review" items="${listReview}">
 	
 							<tr>
-								<td><c:out value="${menu.id}" /></td>
-								<td><c:out value="${menu.name}" /></td>
-								<td><c:out value="${menu.type}" /></td>
-								<td><c:out value="${menu.price}" /></td>
-								<td><c:out value="${menu.description}" /></td>
-								<td><a href="edit?id=<c:out value='${menu.id}' />">Edit</a>
+								<td><c:out value="${review.id}" /></td>
+								<td><c:out value="${review.name}" /></td>
+								<td><c:out value="${review.price}" /></td>
+								<td><c:out value="${review.description}" /></td>
+								<td><a href="edit?id=<c:out value='${review.id}' />">Edit</a>
 									&nbsp;&nbsp;&nbsp;&nbsp; <a
-									href="delete?id=<c:out value='${menu.id}' />">Delete</a></td>
+									href="delete?id=<c:out value='${review.id}' />">Delete</a></td>
 							</tr>
 						</c:forEach>
 						<!-- } -->
